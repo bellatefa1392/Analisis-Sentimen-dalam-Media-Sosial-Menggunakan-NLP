@@ -1,0 +1,69 @@
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class SentimentAnalysisExample {
+
+    // Daftar kata positif dan negatif
+    private static final Set<String> positiveWords = new HashSet<>(Arrays.asList(
+            "amazing", "good", "great", "happy", "love", "efficient", "fantastic", "wonderful", "excellent", "positive"
+    ));
+
+    private static final Set<String> negativeWords = new HashSet<>(Arrays.asList(
+            "bad", "terrible", "sad", "horrible", "inefficient", "negative", "poor", "hate", "awful", "disappointing"
+    ));
+
+    public static void main(String[] args) {
+        // Teks yang akan dianalisis
+        String text = "The new product is really amazing and highly efficient!";
+
+        // Melakukan analisis sentimen
+        analyzeSentiment(text);
+    }
+
+    public static void analyzeSentiment(String text) {
+        int positiveScore = 0;
+        int negativeScore = 0;
+        int neutralScore = 0;
+
+        // Pisahkan teks menjadi kata-kata
+        String[] words = text.toLowerCase().split("\\W+");
+        int totalWords = words.length;
+
+        // Periksa setiap kata dalam teks
+        for (String word : words) {
+            if (positiveWords.contains(word)) {
+                positiveScore++;
+            } else if (negativeWords.contains(word)) {
+                negativeScore++;
+            }
+        }
+
+        // Hitung skor netral
+        neutralScore = totalWords - (positiveScore + negativeScore);
+
+        // Hitung total skor
+        double positivePercentage = (double) positiveScore / totalWords;
+        double negativePercentage = (double) negativeScore / totalWords;
+        double neutralPercentage = (double) neutralScore / totalWords;
+        double mixedPercentage = 0.0; // Dalam contoh ini, kita tidak menghitung mixed
+
+        // Tentukan sentimen berdasarkan skor
+        String sentiment;
+        if (positiveScore > negativeScore) {
+            sentiment = "POSITIVE";
+        } else if (negativeScore > positiveScore) {
+            sentiment = "NEGATIVE";
+        } else {
+            sentiment = "NEUTRAL";
+        }
+
+        // Tampilkan hasil analisis sentimen
+        System.out.printf("Sentiment: %s%n", sentiment);
+        System.out.printf("Sentiment Scores:%n");
+        System.out.printf("Positive: %.2f%n", positivePercentage);
+        System.out.printf("Negative: %.2f%n", negativePercentage);
+        System.out.printf("Neutral: %.2f%n", neutralPercentage);
+        System.out.printf("Mixed: %.2f%n", mixedPercentage);
+    }
+}
